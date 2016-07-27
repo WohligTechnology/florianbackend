@@ -360,6 +360,15 @@ textarea.materialize-textarea:focus:not([readonly]) {
 .pagination li {
     vertical-align: middle;
 }
-.capitalize{ 
-    text-transform: capitalize;  
+.capitalize{
+    text-transform: capitalize;
+}
+
+.design-imgholder {
+  width: 80px;
+  height: 80px;
+  overflow: hidden;
+}
+.design-imgholder img {
+  width: 100%;
 }

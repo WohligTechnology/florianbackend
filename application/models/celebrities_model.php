@@ -48,7 +48,7 @@ return $query;
 }
 public function getdropdown()
 {
-$query=$this->db->query("SELECT * FROM `florian_celebrities` ORDER BY `id` 
+$query=$this->db->query("SELECT * FROM `florian_celebrities` ORDER BY `id`
                     ASC")->result();
 $return=array(
 "" => "Select Option"
@@ -58,6 +58,12 @@ foreach($query as $row)
 $return[$row->id]=$row->name;
 }
 return $return;
+}
+
+public function getCelebrities()
+{
+  $query = $this->db->query("SELECT `id`, `image`, `order` FROM `florian_celebrities` WHERE 1 ORDER BY `order`")->result();
+ return $query;
 }
 }
 ?>

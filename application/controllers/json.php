@@ -1,5 +1,5 @@
 <?php if ( ! defined("BASEPATH")) exit("No direct script access allowed");
-class Json extends CI_Controller 
+class Json extends CI_Controller
 {function getalleditorials()
 {
 $elements=array();
@@ -275,6 +275,27 @@ public function getsinglecontact()
 {
 $id=$this->input->get_post("id");
 $data["message"]=$this->contact_model->getsinglecontact($id);
+$this->load->view("json",$data);
+}
+public function getDesigners()
+{
+$id=$this->input->get_post("id");
+$data["message"]=$this->design_model->getDesigners($id);
+$this->load->view("json",$data);
+}
+public function getEditorials()
+{
+$data["message"]=$this->editorials_model->getEditorials();
+$this->load->view("json",$data);
+}
+public function getCelebrities()
+{
+$data["message"]=$this->celebrities_model->getCelebrities();
+$this->load->view("json",$data);
+}
+public function getTvc()
+{
+$data["message"]=$this->tvc_model->getTvc();
 $this->load->view("json",$data);
 }
 } ?>
