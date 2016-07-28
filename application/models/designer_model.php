@@ -26,11 +26,11 @@ return $query;
 }
 public function edit($id,$name)
 {
-if($image=="")
-{
-$image=$this->designer_model->getimagebyid($id);
-$image=$image->image;
-}
+// if($image=="")
+// {
+// $image=$this->designer_model->getimagebyid($id);
+// $image=$image->image;
+// }
 $data=array("name" => $name);
 $this->db->where( "id", $id );
 $query=$this->db->update( "florian_designer", $data );

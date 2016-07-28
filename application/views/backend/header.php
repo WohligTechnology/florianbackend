@@ -34,7 +34,7 @@
 			<li class="sub-menu logo">
                     		<?php   if($ProjectTitle->name !="") 	{ ?>
 						<a id="logo-container" href="<?php echo site_url(); ?>" class="align-center blue-text text-darken-4" style="font-size: 28px;">
-                           
+
                             <span style="font-weight: 400;"><?php echo $ProjectTitle->name ?></span>
 						</a>
 						<?php }
@@ -44,7 +44,7 @@
 							<img src="<?php echo base_url('uploads').'/'.$ProjectTitle->logo; ?>" width="40" style="margin-top: 15px;
     margin-left: 15px; margin-right: 5px;">
 						</div>
-						
+
 						<?php }?>
 
                     </li>
@@ -136,7 +136,7 @@
                         <a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
                     </div>
                     <div class="col s6 offset-l6 m6 l6 search">
-                        <a href="<?php echo site_url('login/logout'); ?>" class="waves-effect waves-light btn red" style="float:right; margin: 7px 0 0;"><i class="material-icons left">power_settings_new</i> Logout</a>
+                        <a href="<?php echo site_url('login/logout'); ?>" class="waves-effect waves-light btn red" style="float:right; margin: 7px 0 0;"><i style="line-height: 35px;" class="material-icons left">power_settings_new</i> Logout</a>
                     </div>
                 </div>
         </nav>
