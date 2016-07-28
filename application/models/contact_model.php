@@ -48,7 +48,7 @@ return $query;
 }
 public function getdropdown()
 {
-$query=$this->db->query("SELECT * FROM `florian_contact` ORDER BY `id` 
+$query=$this->db->query("SELECT * FROM `florian_contact` ORDER BY `id`
                     ASC")->result();
 $return=array(
 "" => "Select Option"
@@ -58,6 +58,31 @@ foreach($query as $row)
 $return[$row->id]=$row->name;
 }
 return $return;
+}
+
+
+public function contactSubmit($name, $phone, $email, $message)
+{
+    if(!empty($email))
+    {
+        $this->db->query("INSERT INTO `florian_contact`(`name`,`phone`,`email`,`message`) VALUE('$name', '$phone','$email','$message')");
+       $message = "<html><body><div id=':1fn' class='a3s adM' style='overflow: hidden;'>
+      <p style='color:#000;font-family:Roboto;font-size:14px'>Name : $name <br/>
+    Phone : $phone <br/>
+    Email : $email <br/>
+    Message : $message
+      </p>
+    </div></body></html>";
+    $this->email_model->emailer($message,'Contact Form Submission',$email,$username);
+    $object = new stdClass();
+    $object->value = true;
+    }
+else
+{
+$object = new stdClass();
+$object->value = false;
+}
+    return $object;
 }
 }
 ?>

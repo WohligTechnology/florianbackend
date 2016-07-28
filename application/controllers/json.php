@@ -298,4 +298,15 @@ public function getTvc()
 $data["message"]=$this->tvc_model->getTvc();
 $this->load->view("json",$data);
 }
+
+public function contactSubmit()
+{
+    $data = json_decode(file_get_contents('php://input'), true);
+    $name = $data['name'];
+    $phone = $data['phone'];
+    $email = $data['email'];
+    $message = $data['message'];
+    $data['message'] = $this->contact_model->contactSubmit($name, $phone, $email, $message);
+    $this->load->view('json', $data);
+}
 } ?>
