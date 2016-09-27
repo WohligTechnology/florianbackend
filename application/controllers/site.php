@@ -1321,5 +1321,323 @@ $data["redirect"]="site/viewcontact";
 $this->load->view("redirect",$data);
 }
 
+//IMAGE upload
+
+		public function viewslider()
+	    {
+	        $access=array("1","2");
+	        $this->checkaccess($access);
+	        $data["page"]="viewslider";
+	        $data[ 'user' ] =$this->user_model->getuserdropdown();
+	        $data["base_url"]=site_url("site/viewsliderjson");
+	        $data["title"]="View slider";
+	        $data['activemenu'] = 'slider';
+	        $this->load->view("template",$data);
+	    }
+	    function viewsliderjson()
+	    {
+	        $elements=array();
+	        $elements[0]=new stdClass();
+	        $elements[0]->field="`slider`.`id`";
+	        $elements[0]->sort="1";
+	        $elements[0]->header="ID";
+	        $elements[0]->alias="id";
+
+
+					$elements[1]=new stdClass();
+					$elements[1]->field="`slider`.`image`";
+					$elements[1]->sort="1";
+					$elements[1]->header="Image";
+					$elements[1]->alias="image";
+
+					$elements[2]=new stdClass();
+					$elements[2]->field="`slider`.`order`";
+					$elements[2]->sort="1";
+					$elements[2]->header="Order";
+					$elements[2]->alias="order";
+
+					$elements[3]=new stdClass();
+					$elements[3]->field="`slider`.`mobile_image`";
+					$elements[3]->sort="1";
+					$elements[3]->header="Mobile Image";
+					$elements[3]->alias="mobile_image";
+
+					$elements[4]=new stdClass();
+					$elements[4]->field="`slider`.`url`";
+					$elements[4]->sort="1";
+					$elements[4]->header="Url";
+					$elements[4]->alias="url";
+
+					$elements[5]=new stdClass();
+					$elements[5]->field="`slider`.`status`";
+					$elements[5]->sort="1";
+					$elements[5]->header="Status";
+					$elements[5]->alias="status";
+
+
+	        $search=$this->input->get_post("search");
+	        $pageno=$this->input->get_post("pageno");
+	        $orderby=$this->input->get_post("orderby");
+	        $orderorder=$this->input->get_post("orderorder");
+	        $maxrow=$this->input->get_post("maxrow");
+	        if($maxrow=="")
+	        {
+	        $maxrow=20;
+	        }
+	        if($orderby=="")
+	        {
+	        $orderby="id";
+	        $orderorder="ASC";
+	        }
+	        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `slider` ");
+	        $this->load->view("json",$data);
+	    }
+
+	    public function createslider()
+	    {
+	        $access=array("1","2");
+	        $this->checkaccess($access);
+			$data['status'] = array(
+                  '1'  => 'Enable',
+                  '0'    => 'Disable'
+                );  
+	        $data[ 'user' ] =$this->user_model->getuserdropdown();
+	        $data["page"]="createslider";
+	        $data["title"]="Create slider";
+	        $this->load->view("template",$data);
+	    }
+	    public function createslidersubmit()
+	    {
+	        $access=array("1","2");
+	        $this->checkaccess($access);
+	        $this->form_validation->set_rules("message","Message","trim");
+			$data['status'] = array(
+                  '1'  => 'Enable',
+                  '0'    => 'Disable'
+                );
+	        if($this->form_validation->run()==FALSE)
+	        {
+	            $data["alerterror"]=validation_errors();
+	            $data[ 'user' ] =$this->user_model->getuserdropdown();
+	            $data["page"]="createslider";
+	            $data["title"]="Create slider";
+	            $this->load->view("template",$data);
+	        }
+	        else
+	        {
+	            $order=$this->input->get_post("order");
+				$url=$this->input->get_post("url");
+				$status=$this->input->get_post("status");
+	            // $image=$this->input->get_post("image");
+				$config['upload_path'] = './uploads/';
+				$config['allowed_types'] = 'gif|jpg|png|jpeg';
+				$this->load->library('upload', $config);
+				$filename="image";
+				$image="";
+				if (  $this->upload->do_upload($filename))
+				{
+					$uploaddata = $this->upload->data();
+					$image=$uploaddata['file_name'];
+
+									$config_r['source_image']   = './uploads/' . $uploaddata['file_name'];
+									$config_r['maintain_ratio'] = TRUE;
+									$config_t['create_thumb'] = FALSE;///add this
+								
+									$config_r['quality']    = 100;
+									//end of configs
+
+									$this->load->library('image_lib', $config_r);
+									$this->image_lib->initialize($config_r);
+									if(!$this->image_lib->resize())
+									{
+											echo "Failed." . $this->image_lib->display_errors();
+											//return false;
+									}
+									else
+									{
+											//print_r($this->image_lib->dest_image);
+											//dest_image
+											$image=$this->image_lib->dest_image;
+											//return false;
+									}
+
+				}
+
+				$this->load->library('upload', $config);
+				$filename="mobile_image";
+				$mobile_image="";
+				if (  $this->upload->do_upload($filename))
+				{
+					$uploaddata = $this->upload->data();
+					$mobile_image=$uploaddata['file_name'];
+
+									$config_r['source_image']   = './uploads/' . $uploaddata['file_name'];
+									$config_r['maintain_ratio'] = TRUE;
+									$config_t['create_thumb'] = FALSE;///add this
+								
+									$config_r['quality']    = 100;
+									//end of configs
+
+									$this->load->library('image_lib', $config_r);
+									$this->image_lib->initialize($config_r);
+									if(!$this->image_lib->resize())
+									{
+											echo "Failed." . $this->image_lib->display_errors();
+											//return false;
+									}
+									else
+									{
+											//print_r($this->image_lib->dest_image);
+											//dest_image
+											$mobile_image=$this->image_lib->dest_image;
+											//return false;
+									}
+
+				}
+	            if($this->slider_model->create($order,$image,$mobile_image,$url,$status)==0)
+	            $data["alerterror"]="New slider could not be created.";
+	            else
+	            $data["alertsuccess"]="Suggestion created Successfully.";
+	            $data["redirect"]="site/viewslider";
+	            $this->load->view("redirect",$data);
+	        }
+	    }
+	    public function editslider()
+	    {
+	        $access=array("1","2");
+	        $this->checkaccess($access);
+			$data['status'] = array(
+                  '1'  => 'Enable',
+                  '0'    => 'Disable'
+                );
+	        $data[ 'user' ] =$this->user_model->getuserdropdown();
+	        $data["page"]="editslider";
+	        $data["title"]="Edit Suggestion";
+	        $data["before"]=$this->slider_model->beforeedit($this->input->get("id"));
+	        $this->load->view("template",$data);
+	    }
+	    public function editslidersubmit()
+	    {
+	        $access=array("1","2");
+	        $this->checkaccess($access);
+			$data['status'] = array(
+                  '1'  => 'Enable',
+                  '0'    => 'Disable'
+                );
+	        $this->form_validation->set_rules("id","ID","trim");
+	        $this->form_validation->set_rules("message","Message","trim");
+	        if($this->form_validation->run()==FALSE)
+	        {
+	            $data["alerterror"]=validation_errors();
+	            $data[ 'user' ] =$this->user_model->getuserdropdown();
+	            $data["page"]="editslider";
+	            $data["title"]="Edit slider";
+	            $data["before"]=$this->slider_model->beforeedit($this->input->get("id"));
+	            $this->load->view("template",$data);
+	        }
+	        else
+	        {
+	            $id=$this->input->get_post("id");
+				$order=$this->input->get_post("order");
+				$url=$this->input->get_post("url");
+				$status=$this->input->get_post("status");
+	            // $image=$this->input->get_post("image");
+							$config['upload_path'] = './uploads/';
+				$config['allowed_types'] = 'gif|jpg|png|jpeg';
+				$this->load->library('upload', $config);
+				$filename="image";
+				$image="";
+				if (  $this->upload->do_upload($filename))
+				{
+					$uploaddata = $this->upload->data();
+					$image=$uploaddata['file_name'];
+
+									$config_r['source_image']   = './uploads/' . $uploaddata['file_name'];
+									$config_r['maintain_ratio'] = TRUE;
+									$config_t['create_thumb'] = FALSE;///add this
+									$config_r['width']   = 800;
+									$config_r['height'] = 800;
+									$config_r['quality']    = 100;
+									//end of configs
+
+									$this->load->library('image_lib', $config_r);
+									$this->image_lib->initialize($config_r);
+									if(!$this->image_lib->resize())
+									{
+											echo "Failed." . $this->image_lib->display_errors();
+											//return false;
+									}
+									else
+									{
+											//print_r($this->image_lib->dest_image);
+											//dest_image
+											$image=$this->image_lib->dest_image;
+											//return false;
+									}
+
+				}
+
+							if($image=="")
+							{
+							$image=$this->slider_model->getimagebyid($id);
+								 // print_r($image);
+									$image=$image->image;
+							}
+
+				$filename="mobile_image";
+				$mobile_image="";
+				if (  $this->upload->do_upload($filename))
+				{
+					$uploaddata = $this->upload->data();
+					$mobile_image=$uploaddata['file_name'];
+
+									$config_r['source_image']   = './uploads/' . $uploaddata['file_name'];
+									$config_r['maintain_ratio'] = TRUE;
+									$config_t['create_thumb'] = FALSE;///add this
+									$config_r['width']   = 800;
+									$config_r['height'] = 800;
+									$config_r['quality']    = 100;
+									//end of configs
+
+									$this->load->library('image_lib', $config_r);
+									$this->image_lib->initialize($config_r);
+									if(!$this->image_lib->resize())
+									{
+											echo "Failed." . $this->image_lib->display_errors();
+											//return false;
+									}
+									else
+									{
+											print_r($this->image_lib->dest_image);
+											//dest_image
+											$mobile_image=$this->image_lib->dest_image;
+											//return false;
+									}
+
+				}
+
+							if($mobile_image=="")
+							{
+							$mobile_image=$this->slider_model->getimagebyid($id);
+								 print_r($mobile_image);
+									$mobile_image=$mobile_image->mobile_image;
+							}
+	            if($this->slider_model->edit($id,$order,$image,$mobile_image,$url,$status)==0)
+	            $data["alerterror"]="New slider could not be Updated.";
+	            else
+	            $data["alertsuccess"]="slider Updated Successfully.";
+	            $data["redirect"]="site/viewslider";
+	            $this->load->view("redirect",$data);
+	        }
+	    }
+	    public function deleteslider()
+	    {
+	        $access=array("1","2");
+	        $this->checkaccess($access);
+	        $this->slider_model->delete($this->input->get("id"));
+	        $data["redirect"]="site/viewslider";
+	        $this->load->view("redirect",$data);
+	    }
+
 }
 ?>
