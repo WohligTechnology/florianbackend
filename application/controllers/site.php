@@ -1400,7 +1400,7 @@ $this->load->view("redirect",$data);
 			$data['status'] = array(
                   '1'  => 'Enable',
                   '0'    => 'Disable'
-                );  
+                );
 	        $data[ 'user' ] =$this->user_model->getuserdropdown();
 	        $data["page"]="createslider";
 	        $data["title"]="Create slider";
@@ -1442,7 +1442,7 @@ $this->load->view("redirect",$data);
 									$config_r['source_image']   = './uploads/' . $uploaddata['file_name'];
 									$config_r['maintain_ratio'] = TRUE;
 									$config_t['create_thumb'] = FALSE;///add this
-								
+
 									$config_r['quality']    = 100;
 									//end of configs
 
@@ -1474,7 +1474,7 @@ $this->load->view("redirect",$data);
 									$config_r['source_image']   = './uploads/' . $uploaddata['file_name'];
 									$config_r['maintain_ratio'] = TRUE;
 									$config_t['create_thumb'] = FALSE;///add this
-								
+
 									$config_r['quality']    = 100;
 									//end of configs
 
@@ -1618,7 +1618,7 @@ $this->load->view("redirect",$data);
 
 							if($mobile_image=="")
 							{
-							$mobile_image=$this->slider_model->getimagebyid($id);
+							$mobile_image=$this->slider_model->getmimagebyid($id);
 								 print_r($mobile_image);
 									$mobile_image=$mobile_image->mobile_image;
 							}

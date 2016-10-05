@@ -298,6 +298,11 @@ public function getTvc()
 $data["message"]=$this->tvc_model->getTvc();
 $this->load->view("json",$data);
 }
+public function getSlider()
+{
+$data["message"]=$this->slider_model->getSlider();
+$this->load->view("json",$data);
+}
 
 public function contactSubmit()
 {

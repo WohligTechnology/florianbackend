@@ -29,6 +29,16 @@ public function getimagebyid($id)
   $query=$this->db->query("SELECT `image` FROM `slider` WHERE `id`='$id'")->row();
   return $query;
 }
+public function getmimagebyid($id)
+{
+  $query=$this->db->query("SELECT `mobile_image` FROM `slider` WHERE `id`='$id'")->row();
+  return $query;
+}
+public function getSlider()
+{
+  $query=$this->db->query("SELECT * FROM `slider` WHERE `status`=1 ORDER BY `order`")->result();
+  return $query;
+}
 public function edit($id,$order,$image,$mobile_image,$url,$status)
 {
 $data=array("order" => $order,"image" => $image,"mobile_image" => $mobile_image,"url" => $url,"status" => $status);
